@@ -1,0 +1,85 @@
+#include <fstream>
+
+using namespace std;
+
+int m, n, i, j, k, d, vec[80001], fp[30001], prime[30001], maxfp = 0;
+bool p[30001];
+    
+int main()
+{
+    ifstream cin("expresie.in");
+    ofstream cout("expresie.out");
+    
+    p[0] = 1;
+    p[1] = 1;
+    
+    for(i = 2; i <= 30000; i ++)
+    {
+        if(p[i] == 0)
+        {
+            
+        k ++;
+        prime[k] = i;
+        
+            for(j = 2; i * j <= 30000; j ++)
+            {
+                p[i * j] = 1;
+            }
+        }
+    }
+    
+    cin >> m;
+    cin >> n;
+    
+    for(i = 1; i <= n; i ++)
+    {
+        cin >> vec[i];
+        
+        for(d = 1; vec[i] > 1; d ++)
+        {
+            while(vec[i] % prime[d] == 0)
+            {
+                fp[prime[d]] ++;
+                vec[i] = vec[i] / prime[d];
+                
+                if(prime[d] > maxfp)
+                {
+                    maxfp = prime[d];
+                }
+            }
+        }
+    }
+    
+    bool intreg = true;
+    
+    for(i = 1; i <= k; i ++)
+    {
+        if(fp[prime[i]] != 0)
+        {
+            if(fp[prime[i]] % m != 0)
+            {
+                intreg = false;
+                break;
+            }
+        }
+    }
+    
+    if(intreg == false)
+    {
+        cout << 0;
+    }
+    else
+    {
+        cout << 1 << '\n';
+        
+        for(i = 1; prime[i] <= maxfp; i ++)
+        {
+            if(fp[prime[i]] != 0)
+            {
+                cout << prime[i] << ' ' << fp[prime[i]] / m << '\n';
+            }
+        }
+    }
+
+    return 0;
+}
